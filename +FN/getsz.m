@@ -1,5 +1,5 @@
-function [w,h] = getsz(I)
+function [r,c] = getsz(I)
     sz=size(I);
-    w=sz(1);
-    h=sz(2);
+    r=sz(1);
+    c=sz(2);
 end
