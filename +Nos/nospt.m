@@ -1,5 +1,4 @@
-function [ nosp ] = nospt( I,p )
-[R,C]=Fn.getsz(I);
+function [ nosp ] = nospt( R,C,p )
 N=R*C;
 Np=int32((p*N)/100);
 nos=randperm(N);

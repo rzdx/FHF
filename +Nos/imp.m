@@ -1,7 +1,8 @@
 function [ O ] = imp( I,p )
+[R,C]=Fn.getsz(I);
 O=I;
-nosp=Nos.nospt(I(:,:,1),p);
-for i=1:3
+nosp=Nos.nospt(R,C,p);
+for i=1:size(I,3)
     Ot=I(:,:,i);
     for j=1:length(nosp);
         if rand<=0.5
