@@ -1,7 +1,6 @@
-[PCN,I]=Pio.picrd({'lena_clr','histo_gry'});
+[PCN,I]=Pio.picrd({'lena_clr'});
 O{1}=Nos.imp(I{1},10);
 O{2}=Nos.gau(I{1},10);
-O{3}=Nos.gau(I{2},10);
-Fn.histo(I{2});
-Fn.histo(O{3});
+O{3}=Nos.mix(I{1},10);
+
 Pio.picshow(O);
