@@ -1,3 +1,3 @@
-function [ O ] = mix( I,p )
-O=Nos.imp(Nos.gau(I,p),p);
+function [ O ] = mix( I,S,p )
+O=Nos.imp(Nos.gau(I,S),p);
 end
