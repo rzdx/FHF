@@ -1,4 +1,4 @@
-function [  ] = fznb(  )
+function [ O ] = fznb( I )
 c=0.006;
 w=0.003;
 b={c-w,c,c+w,c+(2*w),0.5};
