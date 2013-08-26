@@ -6,24 +6,25 @@ s={w,w,w,w,0.5};
 m={exp(-1),1,exp(-1),exp(-4),0};
 
 
+di=DI(I);
 
+O=Y(I,di);
 end
 
 function [O]=Y(I,Di)
 [R,C]=Fn.getsz(I);
 O=zeros(R,C,size(I,3));
-L=Lvar(I);
-padl=L-1;
-Lh=(L-1)/2;
+Lm=Lvar(Di);
 for j=1:size(I,3)
     Ie=I(:,:,j);
     Oe=zeros(R,C);
     for r=1:R
         for c=1:C
-           if Di(r,c)==1&&sum(sum(Di(r-Lh:r+Lh,c-Lh:c+Lh)))<L*L
-           Oe(r,c)=X();
+           if Di(r,c)==1
+               [sr,sc]=scord();
+               Oe(r,c)=Ie(sr,sc);
            else
-           Oe(r,c)=Ie(r,c);
+               Oe(r,c)=Ie(r,c);
            end
         end
        
@@ -32,9 +33,48 @@ for j=1:size(I,3)
 end
 end
 
-function [L]=Lvar(I)
-L=3;
+function [sr,sc]=scord()
 
+end
+
+function [O]=Lvar(Di)
+[R,C]=Fn.getsz(Di);
+O=zeros(R,C);
+for r=1:R
+    for c=1:C
+        chk=0;
+        for L=3:2:min(R,C)
+            padl=L-1;
+            Lh=(L-1)/2;
+            Ie=Fn.padd1(Di,padl);
+            rr=r+Lh;
+            cc=c+Lh;
+            if sum(sum(Ie(rr-Lh:rr+Lh,cc-Lh:cc+Lh)))~=L*L
+                chk=1;
+                break;
+            end
+        end
+        if chk
+            O(r,c)=L;
+        else
+            error('L out_of_bound')
+        end
+    end
+end
+end
+
+function [O]=getnzfp(SbPdDi,centR,centC,L)
+I=SbPdDi;
+Ln=(L+1)/2;
+ct=0;
+for r=1:L
+   for c=1:L
+       if I(r,c)==0
+           ct=ct+1;
+           O{ct}=[r-Ln+centR,c-Ln+centC];
+       end
+   end
+end
 end
 
 function [O]= DI(I)
