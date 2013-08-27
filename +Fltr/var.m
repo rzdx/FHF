@@ -4,7 +4,7 @@ padl=L-1;
 Lh=(L-1)/2;
 O=I;
     for j=1:size(I,3)
-        Ie=Fn.padd(I(:,:,j),padl);
+        Ie=Fn.padd(I(:,:,j),L);
         Oe=Ie;
         for r=(L+1)/2:R-((L-1)/2)+padl*2
             for c=(L+1)/2:C-((L-1)/2)+padl*2
@@ -17,6 +17,6 @@ O=I;
                 Oe(r,c)=sm/((L*L)-1);
             end
         end
-        O(:,:,j)=Fn.dpadd(Oe,padl);
+        O(:,:,j)=Fn.dpadd(Oe,L);
     end
 end

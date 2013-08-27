@@ -1,4 +1,5 @@
-function O=dpadd(I,n)
+function O=dpadd(I,L)
+n=L-1;
 sz=size(I);
 row=sz(1);
 col=sz(2);
