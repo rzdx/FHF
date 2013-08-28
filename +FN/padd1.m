@@ -1,10 +1,12 @@
 function O=padd1(I,L)
 n=L-1;
-sz=size(I);
-row=sz(1);
-col=sz(2);
+[R,C]=Fn.getsz(I);
+D=size(I,3);
 spad=ones(n,n);
-rpad=ones(row,n);
-cpad=ones(n,col);
-O=double([spad,cpad,spad;rpad,I,rpad;spad,cpad,spad]);
+rpad=ones(R,n);
+cpad=ones(n,C);
+O=zeros(length([spad;rpad;spad]),length([spad,cpad,spad]),D);
+for i=1:D
+O(:,:,i)=double([spad,cpad,spad;rpad,I(:,:,i),rpad;spad,cpad,spad]);
+end
 end

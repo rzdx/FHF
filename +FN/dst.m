@@ -1,5 +1,5 @@
 function [ O ] = dst( p1,p2 )
-if ~isequal(size(p1),size(p2))
+if Fn.mul(size(p1))~=Fn.mul(size(p2))
     error('-diff. dim.-');
 end
 s=0;
