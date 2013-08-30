@@ -1,34 +1,25 @@
-function [ O ] = fzrg( I,L )
+function [ O ] = fzrg( I )
+L=5;
 mdS=modeS(I,7);
 wa=max(realmin,0.002*mdS-0.005);
 [R,C,D]=fn.getsz(I);
 O=zeros(R,C,D);
-PdI=fn.padd(I,L);
-padtag=ones(R,C);
-Pdpadtag=fn.padd(padtag,L);
-Lh=(L-1)/2;
 for r=1:R
     for c=1:C
-        rr=r+Lh*2;
-        cc=c+Lh*2;
-        SbPdI=PdI(rr-Lh:rr+Lh,cc-Lh:cc+Lh,:);
-        SbPdpadtag=Pdpadtag(rr-Lh:rr+Lh,cc-Lh:cc+Lh);
-        O(r,c,:)=Y(SbPdI,SbPdpadtag,PdI(rr,cc,:),wa);
+        SbI=fn.winsp(I,r,c,L);
+        O(r,c,:)=Y(SbI,I(r,c,:),wa);
     end
 end
 end
 
-function [O]=Y(SbPdI,SbPdpadtag,Cp,wa)
-[R,C]=fn.getsz(SbPdI);
+function [O]=Y(SbI,Cp,wa)
+[R,C]=fn.getsz(SbI);
 u=0;
 d=0;
 for r=1:R
    for c=1:C
-       if SbPdpadtag(r,c)==0
-            continue;
-       end
-       bt=beta(SbPdI(r,c,:),Cp,wa);
-       u=u+bt*SbPdI(r,c,:);
+       bt=beta(SbI(r,c,:),Cp,wa);
+       u=u+bt*SbI(r,c,:);
        d=d+bt;
    end
 end
@@ -57,8 +48,7 @@ O=exp(u/d);
 end
 
 function [O]=siml(Ip,Cp) %Ip=I(NFPcordR,NFPcordC,:)
-MAXI=255;
-O=fn.dst(Ip,Cp)/(3*MAXI);
+O=fn.dst(Ip,Cp)/(3*255);
 end
 
 function [O]=modeS(I,L)
