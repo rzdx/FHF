@@ -15,3 +15,11 @@ for r=1:R
     end 
 end
 end
+
+% [
+% O = matrix transformed form I with change: 1->0 and 0->1
+% ]
+% = zotrans
+% (
+% I = input_matrix
+% )

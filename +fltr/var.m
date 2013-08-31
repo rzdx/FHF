@@ -26,3 +26,12 @@ PdO=zeros(size(PdI,1),size(PdI,2),size(PdI,3));
     end
     O=fn.dpadd(PdO,L);
 end
+
+% [
+% O = a matrix of variance of points in a window with window_length L centered at each position in an input_image I
+% ]
+% =var
+% (
+% I = input_image
+% L = window_length
+% )

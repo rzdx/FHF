@@ -12,3 +12,5 @@ ylabel('Freq.');
 title(['Histogram-',num2str(i)]);
 end
 end
+
+% show histograms of an image I

@@ -9,3 +9,12 @@ for i=1:D
 O(:,:,i)=double([spad,cpad,spad;rpad,I(:,:,i),rpad;spad,cpad,spad]);
 end
 end
+
+% [
+% O = pad an image used for window_length L with 1
+% ]
+% = padd1
+% (
+% I = input_image
+% L = window_length
+% )

@@ -14,3 +14,12 @@ Iavg=zeros(size(Ie,1),size(Ie,2),size(Ie,3));
     end
 O=fn.dpadd(Iavg,L);
 end
+
+% [
+% O = a filtered image by mean_filter with window_size L*L
+% ]
+% = avg
+% (
+% I = input_image
+% L = window_length
+% )

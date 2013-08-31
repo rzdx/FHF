@@ -1,4 +1,4 @@
-function [ O ] = fzrg( I )
+function [ O ] = fzrg( I ) %fuzzy range filter
 L=5;
 mdS=modeS(I,7);
 wa=max(realmin,0.002*mdS-0.005);
@@ -41,17 +41,17 @@ end
 O=u/d;
 end
 
-function [O]=tk(Ip,Cp,b,s)
+function [O]=tk(Ip,Cp,b,s) 
 u=(siml(Ip,Cp)-b)^2;
 d=2*((s)^2);
 O=exp(u/d);
 end
 
-function [O]=siml(Ip,Cp) %Ip=I(NFPcordR,NFPcordC,:)
+function [O]=siml(Ip,Cp) % ~similarity value
 O=fn.dst(Ip,Cp)/(3*255);
 end
 
-function [O]=modeS(I,L)
+function [O]=modeS(I,L) % mode of distribution 
 Sv=fltr.var(I,L);
 [R,C]=fn.getsz(I);
 S=zeros(R,C);

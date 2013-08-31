@@ -18,3 +18,18 @@ for i=1:length(inpic)
     b{i}=double(I{i}(:,:,3));
 end
 end
+
+% read out all input_image's info.
+% [
+% picn = number of images read in
+% I = read_images
+% w = widths 
+% h = heights
+% r = red_images
+% g = green_images
+% b = blue_images
+% ]
+% =picrda (color image only)
+% (
+% inpic = input_image_filepaths
+% )

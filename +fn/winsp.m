@@ -1,4 +1,4 @@
-function [ O,topR,topC ] = winsp( I,r,c,L )
+function [ O,topR,topC ] = winsp( I,r,c,L ) 
 [R,C]=fn.getsz(I);
 Lh=(L-1)/2;
 r1=r-Lh;
@@ -23,3 +23,16 @@ O=I(r1:r2,c1:c2,:);
 topR=r1;
 topC=c1;
 end
+
+% [
+% O = sub-Image with window_length L centered at (r,c)
+% topR = row position of origin_image
+% topC = column position of origin_image
+% ]
+% =winsp
+% (
+% I = input_image
+% r = row pos. 
+% c = col. pos.
+% L = window_length
+% )
