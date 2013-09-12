@@ -29,7 +29,7 @@ for r=1:size(I,1)
 					end
 					%estp
 					eu=zeros(1,1,size(SbI,3));
-					ed=0;
+					ed=realmin;
 					for i=1:length(NFP)
 						Ip=SbI(NFP{i}(1),NFP{i}(2),:);
 						%alpha
