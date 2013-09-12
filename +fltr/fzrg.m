@@ -2,61 +2,89 @@ function [ O ] = fzrg( I ) %fuzzy range filter
 L=5;
 mdS=modeS(I,7);
 wa=max(realmin,0.002*mdS-0.005);
-[R,C,D]=fn.getsz(I);
-O=zeros(R,C,D);
-for r=1:R
-    for c=1:C
-        SbI=fn.winsp(I,r,c,L);
-        O(r,c,:)=Y(SbI,I(r,c,:),wa);
-    end
-end
-end
-
-function [O]=Y(SbI,Cp,wa)
-[R,C]=fn.getsz(SbI);
-u=0;
-d=0;
-for r=1:R
-   for c=1:C
-       bt=beta(SbI(r,c,:),Cp,wa);
-       u=u+bt*SbI(r,c,:);
-       d=d+bt;
-   end
-end
-O=u/d;
-end
-
-function [O]=beta(Ip,Cp,wa)
+O=zeros(size(I,1),size(I,2),size(I,3));
 B={0,wa,2*wa,3*wa,(1+(3*wa))/2};
 S={wa,wa,wa,wa,(1+(3*wa))/4};
 M={1,3/4,1/2,1/4,0};
-
-u=0;
-d=0;
-for i=1:length(B)
-    t=tk(Ip,Cp,B{i},S{i});
-    u=u+(t*M{i});
-    d=d+t;
+for r=1:size(I,1)
+    for c=1:size(I,2)
+        SbI=fn.winsp(I,r,c,L);
+        Cp=I(r,c,:);
+        %O(r,c,:)=Y(SbI,I(r,c,:),wa);
+yu=0;
+yd=0;
+for yr=1:size(SbI,1)
+   for yc=1:size(SbI,2)
+       Ip=SbI(yr,yc,:);
+       %bt=beta(SbI(yr,yc,:),Cp,wa);
+       %
+       bu=0;
+bd=0;
+for bi=1:length(B)
+    %t=tk(Ip,Cp,B{bi},S{bi});
+    simO=norm(double(Ip(:))-double(Cp(:)))/(3*255);
+    tu=(simO-B{bi})^2;
+    
+td=2*((S{bi})^2);
+t=exp(-(tu/td));
+    
+    bu=bu+(t*M{bi});
+    bd=bd+t;
 end
-O=u/d;
+bt=bu/bd;
+       yu=yu+bt*SbI(yr,yc,:);
+       yd=yd+bt;
+   end
 end
-
-function [O]=tk(Ip,Cp,b,s) 
-u=(siml(Ip,Cp)-b)^2;
-d=2*((s)^2);
-O=exp(u/d);
+O(r,c,:)=yu/yd;
+    end
 end
-
-function [O]=siml(Ip,Cp) % ~similarity value
-O=fn.dst(Ip,Cp)/(3*255);
 end
+% 
+% function [O]=Y(SbI,Cp,wa)
+% [sR,sC]=fn.getsz(SbI);
+% yu=0;
+% yd=0;
+% for yr=1:sR
+%    for yc=1:sC
+%        bt=beta(SbI(yr,yc,:),Cp,wa);
+%        yu=yu+bt*SbI(yr,yc,:);
+%        yd=yd+bt;
+%    end
+% end
+% O=yu/yd;
+% end
+% 
+% function [O]=beta(Ip,Cp,wa)
+% B={0,wa,2*wa,3*wa,(1+(3*wa))/2};
+% S={wa,wa,wa,wa,(1+(3*wa))/4};
+% M={1,3/4,1/2,1/4,0};
+% 
+% bu=0;
+% bd=0;
+% for bi=1:length(B)
+%     t=tk(Ip,Cp,B{bi},S{bi});
+%     bu=bu+(t*M{bi});
+%     bd=bd+t;
+% end
+% O=bu/bd;
+% end
+% 
+% function [O]=tk(Ip,Cp,b,s) 
+% tu=(siml(Ip,Cp)-b)^2;
+% td=2*((s)^2);
+% O=exp(-(tu/td));
+% end
+% 
+% function [O]=siml(Ip,Cp) % ~similarity value
+% O=fn.dst(Ip,Cp)/(3*255);
+% end
 
 function [O]=modeS(I,L) % mode of distribution 
 Sv=fltr.var(I,L);
-[R,C]=fn.getsz(I);
-S=zeros(R,C);
-for r=1:R
-   for c=1:C
+S=zeros(size(I,1),size(I,2));
+for r=1:size(I,1)
+   for c=1:size(I,2)
        S(r,c)=sum(Sv(r,c,:))/size(Sv,3);
    end
 end

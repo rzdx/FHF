@@ -1,13 +1,12 @@
 function [ O ] = gau( I,S )
-[R,C,D]=fn.getsz(I);
 O=I;
 MAXI=255;
-for i=1:D
+for i=1:size(I,3)
     Ot=I(:,:,i);
     acc=0;
-    nosp=nos.nospt(R,C,100);
+    nosp=nos.nospt(size(I,1),size(I,2),100);
     for z=-MAXI:MAXI
-        nz=int32(pdf(z,0,S)*(R*C));
+        nz=int32(pdf(z,0,S)*(size(I,1)*size(I,2)));
         for j=acc+1:acc+nz
             if j>length(nosp)
                 break;
