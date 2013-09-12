@@ -1,13 +1,12 @@
 function [ O ] = var( I,L )
-[R,C,D]=fn.getsz(I);
 Lh=(L-1)/2;
-ptg=ones(R,C,D);
+ptg=ones(size(I,1),size(I,2),size(I,3));
 Pdptg=fn.padd(ptg,L);
 PdI=fn.padd(I,L);
 PdO=zeros(size(PdI,1),size(PdI,2),size(PdI,3));
     for j=1:size(I,3)
-        for r=1:R
-            for c=1:C
+        for r=1:size(I,1)
+            for c=1:size(I,2)
                 rr=r+Lh*2;
                 cc=c+Lh*2;
                 Ke=PdI(rr-Lh:rr+Lh,cc-Lh:cc+Lh,j);
