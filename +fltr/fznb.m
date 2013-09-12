@@ -16,6 +16,9 @@ for r=1:size(I,1)
 			%nosleft=nosleft-1
 			L=Lvar(Di,r,c);
 			[SbI,tr,tc]=fn.winsp(I,r,c,L);
+			SbI_R = SbI(:, :, 1);
+			SbI_G = SbI(:, :, 2);
+			SbI_B = SbI(:, :, 3);
 			SbDi=fn.winsp(Di,r,c,L);
 			%[sr,sc]=scord(SbI,SbDi,tr,tc,getnzfp(SbDi));
 			rmin=realmax;
@@ -46,8 +49,14 @@ for r=1:size(I,1)
 									if SbDi(slr,slc)==1 % exclude noise points
 										continue;
 									end
-									sbip1=SbI(slr,slc,:);
-									slsum=slsum+norm(Ip(:)-sbip1(:));
+									
+									slsum = slsum + ...
+										sqrt((Ip(1) - SbI_R(slr, slc)).^2 ...
+										+ (Ip(2) - SbI_G(slr, slc)).^2 ...
+										+ (Ip(3) - SbI_B(slr, slc)).^2);
+									
+% 									sbip1=SbI(slr,slc,:);
+% 									slsum=slsum+norm(Ip(:)-sbip1(:));
 									%        slsum=slsum+sqrt(sum((Ip-SbI(slr,slc,:)).^2));
 									ct=ct+1;
 								end
