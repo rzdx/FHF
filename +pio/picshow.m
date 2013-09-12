@@ -1,6 +1,6 @@
 function picshow(I)
 for i=1:length(I)
-    figure;
+    figure(i);
     imshow(uint8(I{i}));
 end
 end
