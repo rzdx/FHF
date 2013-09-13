@@ -1,46 +1,68 @@
 %rng('default');
 [PCN,I]=pio.picrd({'lena_clr','baboon_clr','pepper_clr'});
+nosct=6;
+T=cell(1,6);
 
-I10=nos.imp(I{1},10);
-fI10=fltr.fznb(I10);
-imp10_PSNR=fn.PSNR(I{1},I10)
-imp10_fznb_PSNR=fn.PSNR(I{1},fI10)
-z1=zeros(1,3);
-z2=zeros(1,3);
-for i=1:length(z1)
-    z1(i)=fn.SSIM2(I{1}(:,:,i),I10(:,:,i));
-    z2(i)=fn.SSIM2(I{1}(:,:,i),fI10(:,:,i));
+rn1={'PSNR_Noisy','PSNR_FHF'};
+rn2={'SSIM_Noisy','SSIM_FHF'};
+cn=cell(1,nosct);
+
+impA=10;
+impmat_PSNR=zeros(2,nosct);
+impmat_SSIM=zeros(2,nosct);
+ct=0;
+for impP=impA:impA:impA*nosct
+    ct=ct+1;
+    cn{ct}=['imp:',num2str(impP),'%'];
+    impimg=nos.imp(I{1},impP);
+    fimpimg=fltr.fznb(impimg);
+    impmat_PSNR(1,ct)=fn.PSNR(I{1},impimg);
+    impmat_PSNR(2,ct)=fn.PSNR(I{1},fimpimg);
+    impmat_SSIM(1,ct)=fn.clrSSIM(I{1},impimg);
+    impmat_SSIM(2,ct)=fn.clrSSIM(I{1},fimpimg);
 end
-imp10_SSIM=mean(z1)
-imp10_fznb_SSIM=mean(z2)
+T{1}={impmat_PSNR,rn1,cn};
+T{2}={impmat_SSIM,rn2,cn};
 
-G10=nos.gau(I{3},10);
-fG10=fltr.fzrg(G10);
-gau10_PSNR=fn.PSNR(I{3},G10)
-gau10_fzrg_PSNR=fn.PSNR(I{3},fG10)
-z1=zeros(1,3);
-z2=zeros(1,3);
-for i=1:length(z)
-    z1(i)=fn.SSIM2(I{3}(:,:,i),G10(:,:,i));
-    z2(i)=fn.SSIM2(I{3}(:,:,i),fG10(:,:,i));
+gauA=5;
+gaumat_PSNR=zeros(2,nosct);
+gaumat_SSIM=zeros(2,nosct);
+ct=0;
+for gauS=gauA:gauA:gauA*nosct
+    ct=ct+1;
+    cn{ct}=['gau:',num2str(gauS)];
+    gauimg=nos.gau(I{3},gauS);
+    fgauimg=fltr.fzrg(gauimg);
+    gaumat_PSNR(1,ct)=fn.PSNR(I{3},gauimg);
+    gaumat_PSNR(2,ct)=fn.PSNR(I{3},fgauimg);
+    gaumat_SSIM(1,ct)=fn.clrSSIM(I{3},gauimg);
+    gaumat_SSIM(2,ct)=fn.clrSSIM(I{3},fgauimg);
 end
-gau10_SSIM=mean(z1)
-gau10_fzrg_SSIM=mean(z2)
+T{3}={gaumat_PSNR,rn1,cn};
+T{4}={gaumat_SSIM,rn2,cn};
 
-N1010=nos.mix(I{1},10,10);
-fN1010=fltr.fzhy(N1010);
-mix1010_PSNR=fn.PSNR(I{1},N1010)
-mix1010_fzhy_PSNR=fn.PSNR(I{1},fN1010)
-z1=zeros(1,3);
-z2=zeros(1,3);
-for i=1:length(z)
-    z1(i)=fn.SSIM2(I{1}(:,:,i),N1010(:,:,i));
-    z2(i)=fn.SSIM2(I{1}(:,:,i),fN1010(:,:,i));
+mixA=5;
+mixmat_PSNR=zeros(2,nosct);
+mixmat_SSIM=zeros(2,nosct);
+ct=0;
+for mixPS=mixA:mixA:mixA*nosct
+    ct=ct+1;
+    cn{ct}=['mix:',num2str(mixPS),'%/',num2str(mixPS)];
+    miximg=nos.mix(I{1},mixPS,mixPS);
+    fmiximg=fltr.fzhy(miximg);
+    mixmat_PSNR(1,ct)=fn.PSNR(I{1},miximg);
+    mixmat_PSNR(2,ct)=fn.PSNR(I{1},fmiximg);
+    mixmat_SSIM(1,ct)=fn.clrSSIM(I{1},miximg);
+    mixmat_SSIM(2,ct)=fn.clrSSIM(I{1},fmiximg);
 end
-mix1010_SSIM=mean(z1)
-mix1010_fzhy_SSIM=mean(z2)
+T{5}={mixmat_PSNR,rn1,cn};
+T{6}={mixmat_SSIM,rn2,cn};
 
-%-----------------------------------------------
+%-----------------------------------------------pic_output
 
-O={I10,fI10,G10,fG10,N1010,fN1010};
-pio.picshow(O);
+% O={};
+% pio.picshow(O);
+
+%-----------------------------------------------table_output
+
+tio.tblshow(T);
