@@ -65,4 +65,5 @@ T{6}={mixmat_SSIM,rn2,cn};
 
 %-----------------------------------------------table_output
 
+save('tables.mat', 'T');
 tio.tblshow(T);
