@@ -5,13 +5,12 @@ Cr=0.8;
 F=0.7;
 d=M*3;
 
-Xmin=zeros(1,d)-5;
-Xmax=ones(1,d)*5;
-X=cell(1,NP);
+Xmin=zeros(d,1)-5;
+Xmax=ones(d,1)*5;
+X=cell(NP,1);
 Xn=X;
 V=X;
-U=X;
-tX=zeros(1,d);
+tX=zeros(d,1);
 tU=tX;
 for np=1:NP
     for i=1:d
@@ -33,11 +32,11 @@ while G<=Gmax
                 tU(j)=V{i}(j);
             else
                 tU(j)=X{i}(j);
-            end
+            end 
         end
         %selction
-        if fn.bbob12_f1(U{i})<=fn.bbob12_f1(X{i})
-            Xn{i}=U{i};
+        if bbob2012.bbob12_f1(tU)<=bbob2012.bbob12_f1(X{i})
+            Xn{i}=tU;
         else
             Xn{i}=X{i};
         end
@@ -49,8 +48,9 @@ end
 min=realmax;
 idx=0;
 for i=1:NP
-    if min>fn.bbob12_f1(X{i})
-        min=fn.bbob12_f1(X{i});
+    minf=bbob2012.bbob12_f1(X{i});
+    if min>minf
+        min=minf;
         idx=i;
     end
 end
