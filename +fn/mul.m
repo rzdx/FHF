@@ -6,9 +6,9 @@ end
 end
 
 % [
-% O = a matrix I's self-multiply 
+% O = a matrix I's self-multiply
 % ]
 % = mul
 % (
 % I = input_matrix
-% ) 
+% )

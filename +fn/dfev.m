@@ -1,12 +1,12 @@
-function [ O ] = dfev(M)
-Gmax=20;
+function [minv,minpara] = dfev(M,ibv,evfnnm)
+Gmax=3000;
 NP=50;
 Cr=0.8;
 F=0.7;
 d=M*3;
 
+Xmax=zeros(d,1)+5;
 Xmin=zeros(d,1)-5;
-Xmax=ones(d,1)*5;
 X=cell(NP,1);
 Xn=X;
 V=X;
@@ -24,7 +24,16 @@ while G<=Gmax
     for i=1:NP
         %mutation
         rd=randperm(NP,3);
-        V{i}=X{rd(1)}+F*(X{rd(2)}-X{rd(3)});
+        switch ibv
+            case 1 %rand
+                V{i}=X{rd(1)}+F*(X{rd(2)}-X{rd(3)});
+            case 2 %best
+                V{i}=X{minX(X,evfnnm)}+F*(X{rd(1)}-X{rd(2)});
+            case 3 %target-to-best
+                V{i}=X{i}+F*(X{minX(X,evfnnm)}-X{i})+F*(X{rd(1)}-X{rd(2)});
+            otherwise
+                error('type_not_match');
+        end
         %crossover
         rdj=randi(d);
         for j=1:d
@@ -32,10 +41,10 @@ while G<=Gmax
                 tU(j)=V{i}(j);
             else
                 tU(j)=X{i}(j);
-            end 
+            end
         end
         %selction
-        if bbob2012.bbob12_f1(tU)<=bbob2012.bbob12_f1(X{i})
+        if feval(evfnnm,tU)<=feval(evfnnm,X{i})
             Xn{i}=tU;
         else
             Xn{i}=X{i};
@@ -44,15 +53,20 @@ while G<=Gmax
     X=Xn;
     G=G+1;
 end
+[minidx,minv]=minX(X,evfnnm);
+minpara=X{minidx};
+end
 
-min=realmax;
+function [minidx,minv]=minX(X,evfnnm)
 idx=0;
-for i=1:NP
-    minf=bbob2012.bbob12_f1(X{i});
+min=realmax;
+for i=1:length(X)
+    minf=feval(evfnnm,X{i});
     if min>minf
         min=minf;
         idx=i;
     end
 end
-O=X{idx};
+minidx=idx;
+minv=min;
 end
