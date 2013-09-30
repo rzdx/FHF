@@ -60,8 +60,9 @@ T{6}={mixmat_SSIM,rn2,cn};
 
 %-----------------------------------------------pic_output
 
-% O={};
-% pio.picshow(O);
+O={impimg,fimpimg,gauimg,fgauimg,miximg,fmiximg};
+pio.picshow(O);
+pio.picwt(O);
 
 %-----------------------------------------------table_output
 

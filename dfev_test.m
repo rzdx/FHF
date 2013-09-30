@@ -23,5 +23,5 @@ for ibv=1:bvtp
     T{ibv}={datav,rownm,colnm};
 end
 
-%save('dfev_tables.mat', 'T');
+save('dfev_tables.mat', 'T');
 tio.tblshow(T);
