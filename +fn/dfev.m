@@ -8,7 +8,7 @@ d=M*3;
 Xmax=zeros(d,1)+5;
 Xmin=zeros(d,1)-5;
 X=cell(NP,1);
-Xn=X;
+newX=X;
 V=X;
 tX=zeros(d,1);
 tU=tX;
@@ -21,6 +21,8 @@ end
 
 G=0;
 while G<=Gmax
+    evX=evalX(X,evfnnm);
+    bestXidx=minX(evX);
     for i=1:NP
         %mutation
         rd=randperm(NP,3);
@@ -28,9 +30,9 @@ while G<=Gmax
             case 1 %rand
                 V{i}=X{rd(1)}+F*(X{rd(2)}-X{rd(3)});
             case 2 %best
-                V{i}=X{minX(X,evfnnm)}+F*(X{rd(1)}-X{rd(2)});
+                V{i}=X{bestXidx}+F*(X{rd(1)}-X{rd(2)});
             case 3 %target-to-best
-                V{i}=X{i}+F*(X{minX(X,evfnnm)}-X{i})+F*(X{rd(1)}-X{rd(2)});
+                V{i}=X{i}+F*(X{bestXidx}-X{i})+F*(X{rd(1)}-X{rd(2)});
             otherwise
                 error('type_not_match');
         end
@@ -44,24 +46,32 @@ while G<=Gmax
             end
         end
         %selction
-        if feval(evfnnm,tU)<=feval(evfnnm,X{i})
-            Xn{i}=tU;
+        if feval(evfnnm,tU)<=evX(i)
+            newX{i}=tU;
         else
-            Xn{i}=X{i};
+            newX{i}=X{i};
         end
     end
-    X=Xn;
+    X=newX;
     G=G+1;
 end
-[minidx,minv]=minX(X,evfnnm);
+evX=evalX(X,evfnnm);
+[minidx,minv]=minX(evX);
 minpara=X{minidx};
 end
 
-function [minidx,minv]=minX(X,evfnnm)
+function [evX]=evalX(X,evfnnm)
+evX=zeros(length(X),1);
+for i=1:length(X)
+    evX(i)=feval(evfnnm,X{i});
+end
+end
+
+function [minidx,minv]=minX(evX)
 idx=0;
 min=realmax;
-for i=1:length(X)
-    minf=feval(evfnnm,X{i});
+for i=1:length(evX)
+    minf=evX(i);
     if min>minf
         min=minf;
         idx=i;
