@@ -10,8 +10,8 @@ dif=zeros(iter,1);
 rownm=cell(evtp,1);
 colnm={'mean','std'};
 datav=zeros(length(rownm),length(colnm));
-for ibv=1:bvtp
-    for iev=1:evtp
+for ibv=1:1
+    for iev=17:17
         for i=1:iter
             dif(i)=feval(['bbob2012.bbob12_f',num2str(iev)],'xopt')...
                 -fn.dfev(fzN,ibv,['bbob2012.bbob12_f',num2str(iev)]);
@@ -23,5 +23,5 @@ for ibv=1:bvtp
     T{ibv}={datav,rownm,colnm};
 end
 
-save('dfev_tables.mat', 'T');
+save('ttt.mat', 'T');
 %tio.tblshow(T);

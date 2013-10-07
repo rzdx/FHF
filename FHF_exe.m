@@ -62,10 +62,10 @@ T{6}={mixmat_SSIM,rn2,cn};
 
 N={'impimg','fimpimg','gauimg','fgauimg','miximg','fmiximg'};
 O={impimg,fimpimg,gauimg,fgauimg,miximg,fmiximg};
-%pio.picshow(O);
+pio.picshow(O);
 pio.picwtn(O,N);
 
 %-----------------------------------------------table_output
 
 save('img_tables.mat', 'T');
-%tio.tblshow(T);
+tio.tblshow(T);
