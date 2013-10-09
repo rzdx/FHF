@@ -1,4 +1,4 @@
-%rng('default');
+% rng('default');
 iter=30;
 bvtp=3;
 evtp=24;
@@ -10,8 +10,8 @@ dif=zeros(iter,1);
 rownm=cell(evtp,1);
 colnm={'mean','std'};
 datav=zeros(length(rownm),length(colnm));
-for ibv=1:bvtp
-    for iev=1:evtp
+for ibv=1:1
+    for iev=1:17
         for i=1:iter
             dif(i)=fn.dfev(fzN,ibv,['bbob2012.bbob12_f',num2str(iev)])...
                 -feval(['bbob2012.bbob12_f',num2str(iev)],'xopt');

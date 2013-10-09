@@ -9,7 +9,6 @@ Xmax=zeros(d,1)+5;
 Xmin=zeros(d,1)-5;
 X=cell(NP,1);
 newX=X;
-V=X;
 tX=zeros(d,1);
 tU=tX;
 for np=1:NP
@@ -25,14 +24,23 @@ while G<=Gmax
     bestXidx=minX(evX);
     for i=1:NP
         %mutation
-        rd=randperm(NP,3);
+%         rd=randperm(NP,3);
+        r1 = floor(1 + NP * rand);
+        r2 = floor(1 + NP * rand);
+        r3 = r2;
+        
+        while r2 == r3
+            r3 = floor(1 + NP * rand);
+        end
+        rd=[r1,r2,r3];
+        
         switch ibv
             case 1 %rand
-                V{i}=X{rd(1)}+F*(X{rd(2)}-X{rd(3)});
+                tV=X{rd(1)}+(F + 0.01 * randn)*(X{rd(2)}-X{rd(3)});
             case 2 %best
-                V{i}=X{bestXidx}+F*(X{rd(1)}-X{rd(2)});
+                tV=X{bestXidx}+F*(X{rd(1)}-X{rd(2)});
             case 3 %target-to-best
-                V{i}=X{i}+F*(X{bestXidx}-X{i})+F*(X{rd(1)}-X{rd(2)});
+                tV=X{i}+F*(X{bestXidx}-X{i})+F*(X{rd(1)}-X{rd(2)});
             otherwise
                 error('type_not_match');
         end
@@ -40,7 +48,7 @@ while G<=Gmax
         rdj=randi(d);
         for j=1:d
             if rand<=Cr||rdj==j
-                tU(j)=V{i}(j);
+                tU(j)=tV(j);
             else
                 tU(j)=X{i}(j);
             end
