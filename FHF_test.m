@@ -1,4 +1,9 @@
 %rng('default');
+tic;
+if matlabpool('size')==0
+	matlabpool('open');
+end
+
 [I,PCN]=pio.picrd({'lena_clr','baboon_clr','pepper_clr'});
 nosct=6;
 T=cell(1,6);
@@ -72,3 +77,4 @@ T{6}={mixmat_SSIM,rn2,cn};
 
 % save('img_T.mat', 'T');
 % tio.tblshow(T);
+toc;
