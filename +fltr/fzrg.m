@@ -1,4 +1,5 @@
-function [ O ] = fzrg( I,par ) %fuzzy range filter
+function [ O ] = fzrg( I,par, m, n, c ) %fuzzy range filter
+I = reshape(I, m, n, c);
 L=7;
 O=zeros(size(I,1),size(I,2),size(I,3));
 if ~iscell(par)
@@ -8,9 +9,9 @@ if ~iscell(par)
 	S=[wa,wa,wa,wa,(1-(3*wa))/4];
 	M=[1,3/4,1/2,1/4,0];
 else
-	B=par{1};
-	S=par{2};
-	M=par{3};
+	B=par(1:5);
+	S=par(6:10);
+	M=par(11:15);
 end
 I_R=I(:,:,1);
 I_G=I(:,:,2);
@@ -19,10 +20,11 @@ parfor r=1:size(I,1)
 	Or=zeros(1,size(I,2),size(I,3));
 	for c=1:size(I,2)
 		SbI=fn.winsp(I,r,c,L);
+		SbI = SbI(:, :, 1:3);
 		SbI_R = SbI(:, :, 1);
 		SbI_G = SbI(:, :, 2);
 		SbI_B = SbI(:, :, 3);
-		yu=0;
+		yu=zeros(1, 1, 3);
 		yd=0;
 		for yr=1:size(SbI,1)
 			for yc=1:size(SbI,2)
@@ -64,6 +66,7 @@ for i=1:fn.mul(size(S))
 	Z(S(i))=Z(S(i))+1;
 end
 rmax=realmin;
+maxS = 0;
 for j=1:mx
 	if Z(j)>rmax
 		rmax=Z(j);
