@@ -1,10 +1,12 @@
-function [minv,minpara] = dfev(M,ibv,evfnnm)
-Gmax=3000;
-NP=50;
-Cr=0.8;
+function [minv,minpara] = EFHFde(fzN,ibv,I,nI,tag)
+Gmax=1;
+NP=3;
+Cr=0.75;
 F=0.7;
-d=M*3;
+stN=3;
+d=fzN*stN;
 
+evfnnm='fn.EFHFev';
 Xmax=zeros(d,1)+5;
 Xmin=zeros(d,1)-5;
 X=cell(NP,1);
@@ -18,9 +20,9 @@ for np=1:NP
     X{np}=tX;
 end
 
-G=0;
+G=1;
 while G<=Gmax
-    evX=evalX(X,evfnnm);
+    evX=evalX(X,evfnnm,I,nI,tag);
     bestXidx=minX(evX);
     for i=1:NP
         %mutation
@@ -53,7 +55,7 @@ while G<=Gmax
             end
         end
         %selction
-        if feval(evfnnm,tU)<=evX(i)
+        if feval(evfnnm,I,nI,tU,tag)<=evX(i)
             newX{i}=tU;
         else
             newX{i}=X{i};
@@ -62,15 +64,15 @@ while G<=Gmax
     X=newX;
     G=G+1;
 end
-evX=evalX(X,evfnnm);
+evX=evalX(X,evfnnm,I,nI,tag);
 [minidx,minv]=minX(evX);
 minpara=X{minidx};
 end
 
-function [evX]=evalX(X,evfnnm)
+function [evX]=evalX(X,evfnnm,I,nI,tag)
 evX=zeros(length(X),1);
 for i=1:length(X)
-    evX(i)=feval(evfnnm,X{i});
+    evX(i)=feval(evfnnm,I,nI,X{i},tag);
 end
 end
 

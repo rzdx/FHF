@@ -1,12 +1,17 @@
-function [ O ] = fzrg( I ) %fuzzy range filter
+function [ O ] = fzrg( I,par ) %fuzzy range filter
 L=7;
-mdS=modeS(I,7);
-wa=max(realmin,0.002*mdS-0.005);
 O=zeros(size(I,1),size(I,2),size(I,3));
-B={0,wa,2*wa,3*wa,(1+(3*wa))/2};
-S={wa,wa,wa,wa,(1-(3*wa))/4};
-M={1,3/4,1/2,1/4,0};
-
+if ~iscell(par)
+    mdS=modeS(I,7);
+    wa=max(realmin,0.002*mdS-0.005);
+    B=[0,wa,2*wa,3*wa,(1+(3*wa))/2];
+    S=[wa,wa,wa,wa,(1-(3*wa))/4];
+    M=[1,3/4,1/2,1/4,0];
+else
+    B=par{1};
+    S=par{2};
+    M=par{3};
+end
 I_R=I(:,:,1);
 I_G=I(:,:,2);
 I_B=I(:,:,3);
@@ -26,10 +31,10 @@ for r=1:size(I,1)
                     simO=sqrt((SbI_R(yr,yc) - I_R(r,c)).^2 ...
                         + (SbI_G(yr,yc) - I_G(r,c)).^2 ...
                         + (SbI_B(yr,yc) - I_B(r,c)).^2)/(3*255);
-                    tu=(simO-B{bi})^2;
-                    td=2*((S{bi})^2);
+                    tu=(simO-B(bi))^2;
+                    td=2*((S(bi))^2);
                     t=exp(-(tu/td));
-                    bu=bu+(t*M{bi});
+                    bu=bu+(t*M(bi));
                     bd=bd+t;
                 end
                 bt=bu/bd;

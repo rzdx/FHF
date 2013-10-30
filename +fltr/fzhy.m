@@ -1,3 +1,3 @@
-function [ O ] = fzhy( I )
-O=fltr.fzrg(fltr.fznb(I));
+function [ O ] = fzhy( I,par )
+O=fltr.fzrg(fltr.fznb(I,par),par);
 end

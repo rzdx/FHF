@@ -1,5 +1,5 @@
 %rng('default');
-[PCN,I]=pio.picrd({'lena_clr','baboon_clr','pepper_clr'});
+[I,PCN]=pio.picrd({'lena_clr','baboon_clr','pepper_clr'});
 nosct=6;
 T=cell(1,6);
 
@@ -16,7 +16,7 @@ for impP=impA:impA:impA*nosct
     ct=ct+1;
     cn{ct}=['imp:',num2str(impP),'%'];
     impimg=nos.imp(I{pidx},impP);
-    fimpimg=fltr.fznb(impimg);
+    fimpimg=fltr.fznb(impimg,0);
     impmat_PSNR(1,ct)=fn.PSNR(I{pidx},impimg);
     impmat_PSNR(2,ct)=fn.PSNR(I{pidx},fimpimg);
     impmat_SSIM(1,ct)=fn.clrSSIM(I{pidx},impimg);
@@ -34,7 +34,7 @@ for gauS=gauA:gauA:gauA*nosct
     ct=ct+1;
     cn{ct}=['gau:',num2str(gauS)];
     gauimg=nos.gau(I{pidx},gauS);
-    fgauimg=fltr.fzrg(gauimg);
+    fgauimg=fltr.fzrg(gauimg,0);
     gaumat_PSNR(1,ct)=fn.PSNR(I{pidx},gauimg);
     gaumat_PSNR(2,ct)=fn.PSNR(I{pidx},fgauimg);
     gaumat_SSIM(1,ct)=fn.clrSSIM(I{pidx},gauimg);
@@ -52,7 +52,7 @@ for mixPS=mixA:mixA:mixA*nosct
     ct=ct+1;
     cn{ct}=['mix:',num2str(mixPS),'%/',num2str(mixPS)];
     miximg=nos.mix(I{1},mixPS,mixPS);
-    fmiximg=fltr.fzhy(miximg);
+    fmiximg=fltr.fzhy(miximg,0);
     mixmat_PSNR(1,ct)=fn.PSNR(I{1},miximg);
     mixmat_PSNR(2,ct)=fn.PSNR(I{1},fmiximg);
     mixmat_SSIM(1,ct)=fn.clrSSIM(I{1},miximg);
@@ -70,5 +70,5 @@ T{6}={mixmat_SSIM,rn2,cn};
 
 %-----------------------------------------------table_output
 
-save('img_T.mat', 'T');
-tio.tblshow(T);
+% save('img_T.mat', 'T');
+% tio.tblshow(T);

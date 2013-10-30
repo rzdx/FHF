@@ -1,13 +1,18 @@
-function [ O ] = fznb( I ) % fuzzy neighbor filter
-Di=DI(I);
+function [ O ] = fznb( I,par ) % fuzzy neighbor filter
 O=zeros(size(I,1),size(I,2),size(I,3));
-ccc=0.006;
-www=0.003;
-B={ccc-www,ccc,ccc+www,ccc+(2*www),0.5};
-S={www,www,www,www,0.5};
-M={exp(-1),1,exp(-1),exp(-4),0};
-
-for r=1:size(I,1)
+Di=DI(I);
+if ~iscell(par)
+    ccc=0.006;
+    www=0.003;
+    B=[ccc-www,ccc,ccc+www,ccc+(2*www),0.5];
+    S=[www,www,www,www,0.5];
+    M=[exp(-1),1,exp(-1),exp(-4),0];
+else
+    B=par{1};
+    S=par{2};
+    M=par{3};
+end
+parfor r=1:size(I,1)
     for c=1:size(I,2)
         if Di(r,c)==1
             L=Lvar(Di,r,c);
@@ -39,7 +44,6 @@ for r=1:size(I,1)
                                     if SbDi(slr,slc)==1 % exclude noise points
                                         continue;
                                     end
-                                    
                                     slsum = slsum + ...
                                         sqrt((Ip(1) - SbI_R(slr, slc)).^2 ...
                                         + (Ip(2) - SbI_G(slr, slc)).^2 ...
@@ -48,10 +52,10 @@ for r=1:size(I,1)
                                 end
                             end
                             silmO=slsum/(3*255*ct);
-                            tu=(silmO-B{ai})^2;
-                            td=2*((S{ai})^2);
+                            tu=(silmO-B(ai))^2;
+                            td=2*((S(ai))^2);
                             t=exp(-(tu/td));
-                            au=au+(t*M{ai});
+                            au=au+(t*M(ai));
                             ad=ad+t;
                         end
                         al=au/ad;
@@ -70,12 +74,17 @@ for r=1:size(I,1)
             end
             sr=mr+tr-1;
             sc=mc+tc-1;
-            O(r,c,:)=I(sr,sc,:);
+%             O(r,c,:)=I(sr,sc,:);
+            vct=I(sr,sc,:);
         else
-            O(r,c,:)=I(r,c,:);
+%             O(r,c,:)=I(r,c,:);
+            vct=I(r,c,:);
         end
+        fcol(c)=vct;
     end
+   frow(r)=fcol;
 end
+ O=frow;
 end
 
 function [O]=Lvar(Di,r,c) % output min length of a window centered at (r,c) with some noise-free points within
