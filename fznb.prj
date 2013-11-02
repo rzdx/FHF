@@ -111,10 +111,10 @@
       <param.grt.MemcpyThreshold>64</param.grt.MemcpyThreshold>
       <param.grt.InitFltsAndDblsToZero>true</param.grt.InitFltsAndDblsToZero>
       <param.UseECoderFeatures>true</param.UseECoderFeatures>
-      <param.outputfile>${PROJECT_ROOT}\codegen\mex\fzrg\fzrg_mex.mexw64</param.outputfile>
+      <param.outputfile>${PROJECT_ROOT}\codegen\mex\fznb\fznb_mex.mexw64</param.outputfile>
       <param.version>R2012a</param.version>
       <param.HasECoderFeatures>true</param.HasECoderFeatures>
-      <param.mex.mainhtml>C:\Users\IDIP\Documents\MATLAB\codegen\mex\fzrg\html\index.html</param.mex.mainhtml>
+      <param.mex.mainhtml>C:\Users\IDIP\Documents\MATLAB\codegen\mex\fznb\html\index.html</param.mex.mainhtml>
       <param.grt.mainhtml/>
       <param.RebuildBeforeTesting>true</param.RebuildBeforeTesting>
       <param.CallGeneratedCodeFromTest>true</param.CallGeneratedCodeFromTest>
@@ -124,8 +124,8 @@
       <param.AutoInferUseUnboundedSize>false</param.AutoInferUseUnboundedSize>
       <param.AutoInferVariableSizeThreshold>1024</param.AutoInferVariableSizeThreshold>
       <param.AutoInferUnboundedSizeThreshold>2048</param.AutoInferUnboundedSizeThreshold>
-      <param.mex.outputfile>fzrg_mex</param.mex.outputfile>
-      <param.grt.outputfile>fzrg</param.grt.outputfile>
+      <param.mex.outputfile>fznb_mex</param.mex.outputfile>
+      <param.grt.outputfile>fznb</param.grt.outputfile>
       <param.artifact>option.target.artifact.mex</param.artifact>
       <param.FixedPointTypeProposalMode>option.FixedPointTypeProposalMode.ProposeFractionLengths</param.FixedPointTypeProposalMode>
       <param.DefaultProposedFixedPointType>numerictype([],16,12)</param.DefaultProposedFixedPointType>
@@ -138,9 +138,9 @@
       <param.UsePreconditions>false</param.UsePreconditions>
       <fileset.entrypoints>
       
-         <file value="${PROJECT_ROOT}\+fltr\fzrg.m" custom-data-expanded="true">
+         <file value="${PROJECT_ROOT}\+fltr\fznb.m" custom-data-expanded="true">
         
-            <Inputs fileName="fzrg.m" functionName="fzrg">
+            <Inputs fileName="fznb.m" functionName="fznb">
           
                <Input Name="I">
             
@@ -221,7 +221,7 @@
       <fileset.package/>
       <build-deliverables>
       
-         <file name="fzrg_mex.mexw64" location="${PROJECT_ROOT}\codegen\mex\fzrg" optional="false">C:\Users\IDIP\Documents\MATLAB\codegen\mex\fzrg\fzrg_mex.mexw64</file>
+         <file name="fznb_mex.mexw64" location="${PROJECT_ROOT}\codegen\mex\fznb" optional="false">C:\Users\IDIP\Documents\MATLAB\codegen\mex\fznb\fznb_mex.mexw64</file>
     
       </build-deliverables>
       <workflow/>

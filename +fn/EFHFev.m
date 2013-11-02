@@ -1,15 +1,11 @@
-function [ mse ] = EFHFev( I,nI,vct,tag )
-par=cell(3,1);
-for i=1:3
-    par{i}=vct(1+(i-1)*5:i*5);
-end
-switch tag
+function [ mse,OI ] = EFHFev( I,nI,vct,fltrtp )
+switch fltrtp
     case 1 %nb
-        OI=fltr.fznb(nI,par);
+        OI=fltr.fznbresh(nI,vct);
     case 2 %rg
-        OI=fltr.fzrg(nI,par);
+        OI=fltr.fzrgresh(nI,vct);
     case 3 %hy
-        OI=fltr.fzhy(nI,par);
+        OI=fltr.fzhyresh(nI,vct);
     otherwise
         error('tag_undefined');
 end
