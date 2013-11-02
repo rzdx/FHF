@@ -3,7 +3,7 @@ if matlabpool('size')==0
 	matlabpool('open');
 end
 
-[I,PCN]=pio.picrd({'lena_clr','baboon_clr','pepper_clr'});
+[I,PCN]=pio.picrd({'lena_clr','baboon_clr','pepper_clr','lena_clr_64','lena_clr_128','lena_clr_256'});
 nosct=6;
 T=cell(1,6);
 rn1={'PSNR_Noisy','PSNR_FHF'};
@@ -61,7 +61,7 @@ pidx=1;
 mixA=5;
 parfor ct=1:nosct
     cn{ct}=['mix:',num2str(mixA*ct),'%/',num2str(mixA*ct)];
-    miximg=nos.mix(I{1},mixA*ct,mixA*ct);
+    miximg=nos.mix(I{pidx},mixA*ct,mixA*ct);
     fmiximg=fltr.fzhyresh(miximg,0);
     PSNR_nos(ct)=fn.PSNR(I{pidx},miximg);
     PSNR_FHF(ct)=fn.PSNR(I{pidx},fmiximg);

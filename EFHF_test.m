@@ -16,7 +16,7 @@ PSNR_EFHF=zeros(1,nosct);
 SSIM_nos=zeros(1,nosct);
 SSIM_EFHF=zeros(1,nosct);
 
-for bsvct=1:1
+for bsvct=1:3
     tic;
     pidx=1;
     impA=10;
@@ -65,7 +65,7 @@ for bsvct=1:1
     fltrtp=3;
     parfor ct=1:nosct
         cn{ct}=['mix:',num2str(mixA*ct),'%/',num2str(mixA*ct)];
-        miximg=nos.mix(I{1},mixA*ct,mixA*ct);
+        miximg=nos.mix(I{pidx},mixA*ct,mixA*ct);
         fmiximg=fn.EFHFde(bsvct,I{pidx},miximg,fltrtp);
         PSNR_nos(ct)=fn.PSNR(I{pidx},miximg);
         PSNR_EFHF(ct)=fn.PSNR(I{pidx},fmiximg);
@@ -80,15 +80,15 @@ for bsvct=1:1
     T{6}={SSIM_mat,rn2,cn};
     toc;
     
-    %     -----------------------------------------------pic_output
+    %         -----------------------------------------------pic_output
     %
-    %     N={'impimg','fimpimg','gauimg','fgauimg','miximg','fmiximg'};
-    %     O={impimg,fimpimg,gauimg,fgauimg,miximg,fmiximg};
-    %     pio.picshow(O);
-    %     pio.picwtn(O,N);
+    %         N={'impimg','fimpimg','gauimg','fgauimg','miximg','fmiximg'};
+    %         O={impimg,fimpimg,gauimg,fgauimg,miximg,fmiximg};
+    %         pio.picshow(O);
+    %         pio.picwtn(O,N);
     %
-    %     -----------------------------------------------table_output
-    %
-    %     save('img_T.mat', 'T');
+    %         -----------------------------------------------table_output
+    
+    save(['img_T-',num2str(bsvct),'.mat'], 'T');
     tio.tblshow(T);
 end

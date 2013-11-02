@@ -1,4 +1,4 @@
-function [minOI,minv,minpara] = EFHFde(ibv,I,nI,fltrtp)
+function [minOI,minpara,minv] = EFHFde(ibv,I,nI,fltrtp)
 Gmax=10;
 NP=50;
 Cr=0.75;
