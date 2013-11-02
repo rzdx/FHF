@@ -1,3 +1,5 @@
+% time: about 800 sec. for [idipfire]
+
 %rng('default');
 if matlabpool('size')==0
 	matlabpool('open');

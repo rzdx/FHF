@@ -1,6 +1,6 @@
-function [minOI,minpara,minv] = EFHFde(ibv,I,nI,fltrtp)
-Gmax=10;
-NP=50;
+function [minOI,minpara,minv] = EFHFde(ibv,I,nI,fltrtp) % complexity: NP*(2*Gmax+1)
+Gmax=5;
+NP=10;
 Cr=0.75;
 F=0.7;
 
