@@ -1,14 +1,16 @@
 function [minOI,minpara,minv] = EFHFde(ibv,I,nI,fltrtp) % complexity: NP*(2*Gmax+1)
-Gmax=5;
+Gmax=10;
 NP=10;
-Cr=0.75;
+Cr=0.8;
 F=0.7;
 
 d=15;
 
+fhf_best=1;
+
 evfnnm='fn.EFHFev';
-Xmax=zeros(d,1)+5;
-Xmin=zeros(d,1)-5;
+Xmax=zeros(d,1)+1;
+Xmin=zeros(d,1);
 X=zeros(d,NP);
 newX=X;
 tX=zeros(d,1);
@@ -19,6 +21,26 @@ for np=1:NP
     end
     X(:,np)=tX;
 end
+
+%-----------fhf_ind
+if fhf_best==1
+    ccc=0.006;
+    www=0.003;
+    X(:,1)=[...
+    [ccc-www;ccc;ccc+www;ccc+(2*www);0.5];...
+    [www;www;www;www;0.5];...
+    [exp(-1);1;exp(-1);exp(-4);0]...
+    ];
+
+    mdS=fn.modeS(nI,5);
+    wa=max(realmin,0.002*mdS-0.005);
+    X(:,2)=[...
+    [0;wa;2*wa;3*wa;(1+(3*wa))/2];...
+    [wa;wa;wa;wa;(1-(3*wa))/4];...
+    [1;3/4;1/2;1/4;0]...
+    ];
+end
+%-----------
 
 G=1;
 while G<=Gmax
@@ -39,7 +61,7 @@ while G<=Gmax
                 tV=X(:,rd(1))+(F + 0.01 * randn)*(X(:,rd(2))-X(:,rd(3)));
             case 2 %best
                 tV=X(:,bestXidx)+F*(X(:,rd(2))-X(:,rd(3)));
-            case 3 %target-to-best
+            case 3 %current-to-best
                 tV=X(:,i)+F*(X(:,bestXidx)-X(:,i))+F*(X(:,rd(2))-X(:,rd(3)));
             otherwise
                 error('type_not_match');
