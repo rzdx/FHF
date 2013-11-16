@@ -1,9 +1,9 @@
 function [ O ] = fzrg( I,par,m,n,c )
 I = reshape(I, m, n, c);
-L=5;
+L=7;
 O=zeros(size(I,1),size(I,2),size(I,3));
 if length(par)==1
-    mdS=fn.modeS(I,L);
+    mdS=modeS(I,7);
     wa=max(realmin,0.002*mdS-0.005);
     B=[0,wa,2*wa,3*wa,(1+(3*wa))/2];
     S=[wa,wa,wa,wa,(1-(3*wa))/4];
@@ -49,4 +49,29 @@ for r=1:size(I,1)
     end
     O(r,:,:)=Or;
 end
+end
+
+function [O]=modeS(I,L) % mode of distribution
+Sv=fltr.var(I,L);
+S=zeros(size(I,1),size(I,2));
+for r=1:size(I,1)
+    for c=1:size(I,2)
+        S(r,c)=sum(Sv(r,c,:))/size(Sv,3);
+    end
+end
+S=round(S);
+mx=max(S(:));
+Z=zeros(1,mx);
+for i=1:fn.mul(size(S))
+    Z(S(i))=Z(S(i))+1;
+end
+rmax=realmin;
+maxS = 0;
+for j=1:mx
+    if Z(j)>rmax
+        rmax=Z(j);
+        maxS=j;
+    end
+end
+O=round(sqrt(maxS));
 end

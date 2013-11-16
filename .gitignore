@@ -2,4 +2,3 @@
 *.asv
 ignore/
 codegen/
-result/

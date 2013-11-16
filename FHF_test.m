@@ -1,3 +1,5 @@
+% time: about 800 sec. for [idipfire]
+
 %rng('default');
 if matlabpool('size')==0
 	matlabpool('open');
@@ -16,10 +18,8 @@ PSNR_FHF=zeros(1,nosct);
 SSIM_nos=zeros(1,nosct);
 SSIM_FHF=zeros(1,nosct);
 
-allpidx=1;
-
 tic;
-pidx=allpidx;
+pidx=1;
 impA=10;
 for ct=1:nosct
     cn{ct}=['imp:',num2str(ct*impA),'%'];
@@ -39,7 +39,7 @@ T{2}={SSIM_mat,rn2,cn};
 toc;
 
 tic;
-pidx=allpidx;
+pidx=3;
 gauA=5;
 parfor ct=1:nosct
     cn{ct}=['gau:',num2str(ct*gauA)];
@@ -59,7 +59,7 @@ T{4}={SSIM_mat,rn2,cn};
 toc;
 
 tic;
-pidx=allpidx;
+pidx=1;
 mixA=5;
 parfor ct=1:nosct
     cn{ct}=['mix:',num2str(mixA*ct),'%/',num2str(mixA*ct)];
