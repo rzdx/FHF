@@ -1,4 +1,4 @@
-function [minv,minpara,gminv,gmeanv,suCR,suF] = jdfev(Gmax,NP,d,evfnnm,evn,p,c)
+function ctrplot(Gmax,NP,d,evfnnm,evn,p,c)
 uCR=0.5;
 uF=0.5;
 A=[];
@@ -17,7 +17,6 @@ for np=1:NP
 end
 
 gminv=zeros(Gmax,1);
-gmeanv=gminv;
 evX=evalX(X,evfnnm,evn);
 suCR=gminv;
 suF=suCR;
@@ -26,7 +25,7 @@ for G=1:Gmax
     sF=[];
     CR=zeros(1,NP);
     F=CR;
-
+    
     [srtX,srtXidx]=sort(evX);
     srtXidx=srtXidx(1:round(p*NP));
     for i=1:NP
@@ -47,7 +46,7 @@ for G=1:Gmax
         pbidx=srtXidx(randi(length(srtXidx)));
         r1=fn.dfrandi(1,NP,i);
         r2=fn.dfrandi(1,NP+size(A,2),i,r1);
-   
+        
         Xi=X(:,i);
         Xpb=X(:,pbidx);
         Xr1=X(:,r1);
@@ -57,7 +56,7 @@ for G=1:Gmax
             Xr2=A(:,r2-NP);
         end
         
-        V=Xi+F(i)*(Xpb-Xi)+F(i)*(Xr1-Xr2);        
+        V=Xi+F(i)*(Xpb-Xi)+F(i)*(Xr1-Xr2);
         
         randj=randi(d);
         for j=1:d
@@ -79,20 +78,22 @@ for G=1:Gmax
     end
     X=newX;
     evX=evalX(X,evfnnm,evn);
-    [minv,minidx]=min(evX);
-    minpara=X(:,minidx);
-    gminv(G)=minv;
-    gmeanv(G)=mean(evX);
     
     if size(A,2)>NP
         A(:,fn.dfrandi(size(A,2)-NP,size(A,2)))=[];
     end
     if ~isempty(sCR)
-    uCR=(1-c)*uCR+c*mean(sCR);
-    uF=(1-c)*uF+c*meanL(sF);
+        uCR=(1-c)*uCR+c*mean(sCR);
+        uF=(1-c)*uF+c*meanL(sF);
     end
     suCR(G)=uCR;
     suF(G)=uF;
+    
+    %     ploto(X,evfnnm,evn,-100,-100,100,100,G,1);
+    
+    if (ismember(G,round(Gmax*((1:4)/4)))||G==1)
+        ploto(X,evfnnm,evn,-100,-100,100,100,G);
+    end
 end
 end
 
@@ -107,4 +108,29 @@ function [O]=meanL(sF)
 u=sum(sF.^2);
 d=sum(sF);
 O=u/d;
+end
+
+function ploto(X,evfnnm,evn,xmin,ymin,xmax,ymax,G)
+ptfnm='.png';
+fg=figure('visible','off');
+x=linspace(xmin, xmax, 200);
+y=linspace(ymin, ymax, 200);
+[xx,yy] = meshgrid(x,y);
+zz=zeros(length(x),length(y));
+for i=1:numel(x)
+    for j=1:numel(y)
+        xi = xx(i,j);
+        yi = yy(i,j);
+        zz(i,j)=feval(evfnnm,[xi;yi],evn);
+    end
+end
+contour(xx,yy,zz);
+colorbar;
+axis ([xmin,xmax,ymin,ymax]);
+title(['Contour-f',num2str(evn),' Generation-',num2str(G)]);
+hold on
+plot(X(1,:),X(2,:),'kx','MarkerSize',12,'LineWidth',2);
+pause(0.01);
+saveas(fg,[fio.addslash(1,'result-p','contour'),'contour_f',num2str(evn),'_g',num2str(G),ptfnm]);
+hold off
 end

@@ -1,7 +1,6 @@
 mpool
 
-ptfnm='.fig';
-% ptfnm='.png';
+ptfnm='.png';
 % fldn='result-p';
 fldn='result';
 sfldn={'meanstd','boxplot','contour','convg','uCRuF','p&c','ranksum'};
@@ -41,7 +40,7 @@ c=stdc;
 for fn=funmin:funmax
     tmsv=zeros(runmax,1);
     parfor rn=1:runmax
-        [jdminv,jdminpara,jdgminv,jdgmeanv,jdsuCR,jdsuF]=de.jdfev(Gmax,NP,d,fhd,fn,p,c,rn);
+        [jdminv,jdminpara,jdgminv,jdgmeanv,jdsuCR,jdsuF]=de.jdfev(Gmax,NP,d,fhd,fn,p,c);
         tmsv(rn)=jdminv-optsol(fn);
         minvrst(rn,fn,:)=jdgminv-optsol(fn);
         meanvrst(rn,fn,:)=jdgmeanv-optsol(fn);
@@ -68,26 +67,27 @@ shT={T};
 XT={[fio.addslash(1,fldn,sfldn{1}),'jade_rst.xls'],0,shT};
 tio.xlswt(XT);
 
-for i=1:funlen
-    fg=figure;
-    boxplot(runrst(:,i));
-    title(['boxplot-f',num2str(i)]);
-    saveas(fg,[fio.addslash(1,fldn,sfldn{2}),'boxplot_f',num2str(i),ptfnm]);
-    close all;
+fg=figure;
+boxplot(runrst);
+set(gca,'YScale','log')
+saveas(fg,[fio.addslash(1,fldn,sfldn{2}),'boxplot_f',ptfnm]);
+close all;
+
+parfor fn=funmin:funmax
+    de.ctrplot(Gmax,NP,2,fhd,fn,stdp,stdc);
 end
 
 for i=1:funlen
     [srtrunrst,srtrunrstidx]=sort(runrst(:,i));
     fg=figure;
     tminv=minvrst(srtrunrstidx(round(runmax/2)),i,:);
-    plot(1:Gmax,tminv(:),'r');
-    axis([1,Gmax,0,max(tminv)])
+    semilogy(1:Gmax,tminv(:),'r');
     ylabel('Err.');
     xlabel('Gen.');
     title(['convg.-f',num2str(i)]);
     hold on
     tmeanv=meanvrst(srtrunrstidx(round(runmax/2)),i,:);
-    plot(1:Gmax,tmeanv(:),'b');
+    semilogy(1:Gmax,tmeanv(:),'b');
     saveas(fg,[fio.addslash(1,fldn,sfldn{4}),'convg_f',num2str(i),ptfnm]);
     hold off
     
